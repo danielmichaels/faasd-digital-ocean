@@ -1,0 +1,63 @@
+# https://taskfile.dev
+
+version: '3'
+
+
+tasks:
+  default:
+    cmds:
+      - task --list-all
+    silent: true
+
+  create-tfvars:
+    desc: Create an auto.tfvars file if it does not exist.
+    status:
+      - test -e main.auto.tfvars
+    cmds:
+      - echo "Creating tfvars file"
+      - cp example.tfvars main.auto.tfvars
+
+  check:
+    silent: true
+    cmds:
+      - command -v terraform >/dev/null 2>&1 || echo "terraform not installed"
+      - command -v faas-cli >/dev/null 2>&1  || echo "faas-cli not installed"
+
+  init:
+    desc: Initialise Terraform
+    cmds:
+      - terraform init
+
+  plan:
+    desc: Terraform plan
+    cmds:
+      - terraform plan
+
+  apply:
+    desc: Deploy the faasd instance on Digital Ocean
+    cmds:
+      - terraform apply -auto-approve
+
+  output:
+    desc: Run terraform output to re-print the output to your console
+    silent: true
+    cmds:
+      - terraform output droplet_ip
+      - terraform output password
+      - echo "If using a DO managed domain"
+      - terraform output login_cmd
+      - echo "Otherwise use this IP until you setup your own DNS"
+      - terraform output login_cmd_ip
+
+  destroy:
+    desc: Destroy the droplet
+    cmds:
+      - terraform destroy
+
+  setup:
+    desc: Setup the repo ready for configuration prior to deployment.
+    cmds:
+      - task: create-tfvars
+      - task: check
+      - task: init
+
