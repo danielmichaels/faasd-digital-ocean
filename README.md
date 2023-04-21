@@ -13,6 +13,8 @@ to install it, read over the [Taskfile.yml](/Taskfile.yml) to see what commands 
 
 - [Terraform] installed locally
 - A [Digital Ocean][d] account and [API key][apik]
+- A Domain name you control
+- (optionally) The Domain is managed by Digital Ocean
 - [faas-cli] installed (I suggest you get it via [arkade])
 - This repo cloned locally
 
@@ -46,7 +48,7 @@ The following variables can be altered but `do_token` and `letsencrypt_email` mu
 
 `task plan`
 
-This will establist the Terraform plan and check that everything is going to work as expected.
+This will establish the Terraform plan and check that everything is going to work as expected.
 
 **Step 3**
 
@@ -60,7 +62,7 @@ however the login and password will not be displayed.
 `task output`
 
 The login and password for the newly created `faasd` instance will be output to the terminal.
-Copy and paste the output and it will log you into your faasd instance. From here you will be
+Copy and paste the output, and it will log you into your faasd instance. From here you will be
 able to manage the instead using `faas-cli`.
 
 **Destroy**

@@ -19,10 +19,6 @@ variable "do_region" {
   default     = "syd1"
   description = "The Digitalocean region where the faasd droplet will be created."
 }
-variable "ssh_key_file" {
-  default     = "~/.ssh/id_rsa.pub"
-  description = "Path to the SSH public key file"
-}
 variable "droplet_image" {
   default = "ubuntu-20-04-x64"
   description = "Droplet image <ref: https://slugs.do-api.dev>"
@@ -34,4 +30,8 @@ variable "droplet_name" {
 variable "droplet_size" {
   default = "s-1vcpu-1gb"
   description = "Size of the droplet <ref: https://slugs.do-api.dev>"
+}
+variable "do_existing_ssh_key" {
+  description = "The NAME of the SSH key which already exists in Digital Ocean"
+  type = list(string)
 }

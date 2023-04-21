@@ -46,8 +46,6 @@ tasks:
       - terraform output password
       - echo "If using a DO managed domain"
       - terraform output login_cmd
-      - echo "Otherwise use this IP until you setup your own DNS"
-      - terraform output login_cmd_ip
 
   destroy:
     desc: Destroy the droplet

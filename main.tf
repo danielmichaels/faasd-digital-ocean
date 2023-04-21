@@ -5,17 +5,13 @@ resource "random_password" "password" {
 }
 data "template_file" "cloud_init" {
   template = file("cloud-config.tpl")
-  vars = {
+  vars     = {
     gw_password       = random_password.password.result,
     faasd_domain_name = "${var.do_subdomain}.${var.do_domain}"
     letsencrypt_email = var.letsencrypt_email
   }
 }
 
-resource "digitalocean_ssh_key" "faasd_ssh_key" {
-  name       = "ssh-key"
-  public_key = file(var.ssh_key_file)
-}
 
 resource "digitalocean_droplet" "faasd" {
   region    = var.do_region
@@ -23,10 +19,14 @@ resource "digitalocean_droplet" "faasd" {
   name      = var.droplet_name
   size      = var.droplet_size
   user_data = data.template_file.cloud_init.rendered
-  ssh_keys = [
-    digitalocean_ssh_key.faasd_ssh_key.id
-  ]
+  ssh_keys = var.do_existing_ssh_key
 }
+
+# Uncomment this if you want the domain managed by terraform
+#resource "digitalocean_domain" "faasd_domain" {
+#  name = var.do_domain
+#  ip_address  = digitalocean_droplet.faasd.ipv4_address
+#}
 
 resource "digitalocean_record" "faasd" {
   domain = var.do_domain
@@ -34,5 +34,5 @@ resource "digitalocean_record" "faasd" {
   name   = var.do_subdomain
   value  = digitalocean_droplet.faasd.ipv4_address
   # Only creates record if do_create_record is true
-  count = var.do_create_record == true ? 1 : 0
+  count  = var.do_create_record == true ? 1 : 0
 }

@@ -12,11 +12,6 @@ output "password" {
 }
 
 output "login_cmd" {
-  value     = "faas-cli login -g https://${var.do_subdomain}.${var.do_domain}/ -p ${random_password.password.result}"
-  sensitive = true
-}
-
-output "login_cmd_ip" {
-  value     = "faas-cli login -g https://${digitalocean_droplet.faasd.ipv4_address}/ -p ${random_password.password.result}"
+  value     = " echo ${random_password.password.result} | faas-cli login -g https://${var.do_subdomain}.${var.do_domain}/ --password-stdin "
   sensitive = true
 }
